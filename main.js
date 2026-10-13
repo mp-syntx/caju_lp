@@ -2,10 +2,14 @@
  * LP Eva × Caju: solicitação de contrato.
  *
  * Em `mode: 'prototype'` nada sai da página: os envios são simulados e o
- * painel "o que seria registrado na AC" mostra o payload de cada etapa.
+ * painel "o que seria registrado na AC" mostra o payload de cada envio.
  * Para ligar à ActiveCampaign (depois da validação do fluxo), preencher
  * `CONFIG.ac` com os formulários F-A/F-B e os ids dos campos `b2b_*`, e trocar
- * `mode` para 'live' (ver ../tasks/T001_prototipo-lp-caju.md).
+ * `mode` para 'live' (ver ../tasks/T002_revisao-lp-caju-v2.md).
+ *
+ * Fluxo da trilha de contrato (um cartão, etapas curtas):
+ *   1 Você -> 2 Empresa + Termo (envia a solicitação, F-A) -> confirmação
+ *   -> 3 Contrato, opcional: dados jurídicos -> assinatura/financeiro (F-B)
  */
 var CONFIG = {
   mode: 'prototype',
@@ -16,8 +20,8 @@ var CONFIG = {
   ac: {
     endpoint: 'https://bastasentir.activehosted.com/proc.php',
     u: '',
-    solicitacao: { f: '', or: '' }, // F-A: etapa 1 e "prefiro conversar"
-    contrato: { f: '', or: '' },    // F-B: etapa 2
+    solicitacao: { f: '', or: '' }, // F-A: etapa 2 e "falar com especialista"
+    contrato: { f: '', or: '' },    // F-B: etapa 3
     fields: {}                      // nome semântico -> 'field[ID]'
   }
 };
@@ -27,11 +31,20 @@ var CONFIG = {
 
   var $ = function (s, el) { return (el || document).querySelector(s); };
   var $$ = function (s, el) { return Array.prototype.slice.call((el || document).querySelectorAll(s)); };
+  var desktop = window.matchMedia('(min-width: 1100px)');
 
   var store = {
     get: function (k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch (e) { return null; } },
     set: function (k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* sem storage */ } }
   };
+
+  // eventos para GA/Meta quando a medição for ligada
+  function track(acao, extra) {
+    window.dataLayer = window.dataLayer || [];
+    var ev = { event: 'caju_lp', acao: acao };
+    if (extra) Object.keys(extra).forEach(function (k) { ev[k] = extra[k]; });
+    window.dataLayer.push(ev);
+  }
 
   /* ---------- atribuição: canal, consultor e UTMs da URL ---------- */
   var ATTR_KEYS = ['canal', 'consultor', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
@@ -50,31 +63,36 @@ var CONFIG = {
   })();
 
   /* ---------- textos configuráveis ---------- */
-  $$('[data-sla]').forEach(function (el) { el.textContent = CONFIG.sla; });
+  function preencherSla(scope) { $$('[data-sla]', scope).forEach(function (el) { el.textContent = CONFIG.sla; }); }
+  preencherSla();
   $$('[data-termo-versao]').forEach(function (el) { el.textContent = 'Versão ' + CONFIG.termoVersao; });
-  if (CONFIG.mode === 'prototype') $('#proto-flag').hidden = false;
-
-  /* ---------- topo, barra mobile e entrada suave ---------- */
-  var top = $('.top');
-  var barra = $('#barra-mobile');
-  var hero = $('.hero');
-  var solicitar = $('#solicitar');
-  var heroVisivel = true, formVisivel = false;
-  function syncBarra() { barra.classList.toggle('on', !heroVisivel && !formVisivel); }
-  window.addEventListener('scroll', function () { top.classList.toggle('rolou', window.scrollY > 8); }, { passive: true });
-
-  if ('IntersectionObserver' in window) {
-    new IntersectionObserver(function (es) { heroVisivel = es[0].isIntersecting; syncBarra(); }).observe(hero);
-    new IntersectionObserver(function (es) { formVisivel = es[0].isIntersecting; syncBarra(); }, { threshold: 0.05 }).observe(solicitar);
-    var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { rootMargin: '0px 0px -8% 0px' });
-    $$('.reveal').forEach(function (el) { io.observe(el); });
-  } else {
-    $$('.reveal').forEach(function (el) { el.classList.add('in'); });
+  if (CONFIG.mode === 'prototype') {
+    $('#proto-flag').hidden = false;
+    $('.fc-foot').insertAdjacentHTML('beforeend', '<span class="fc-proto">Protótipo: nada é enviado.</span>');
   }
 
-  /* ---------- abas: contrato x conversa ---------- */
+  /* ---------- topo e barra do celular ---------- */
+  var top = $('.top');
+  var card = $('#solicitar');
+  var barra = $('#barra');
+  var heroVisivel = true, cardVisivel = true;
+  function syncBarra() { barra.classList.toggle('on', !desktop.matches && !heroVisivel && !cardVisivel); }
+  window.addEventListener('scroll', function () { top.classList.toggle('rolou', window.scrollY > 8); }, { passive: true });
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { heroVisivel = es[0].isIntersecting; syncBarra(); }).observe($('.hero'));
+    new IntersectionObserver(function (es) { cardVisivel = es[0].isIntersecting; syncBarra(); }, { threshold: 0.15 }).observe(card);
+  }
+
+  // chama atenção para o cartão (desktop: ele já está na tela; celular: rola até ele)
+  function realcar(foco) {
+    card.classList.remove('realce');
+    void card.offsetWidth;
+    card.classList.add('realce');
+    if (!desktop.matches) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (foco) foco.focus({ preventScroll: true });
+  }
+
+  /* ---------- abas ---------- */
   var tabs = { contrato: $('#tab-contrato'), conversa: $('#tab-conversa') };
   var paineis = { contrato: $('#painel-contrato'), conversa: $('#painel-conversa') };
   function abrirAba(nome, foco) {
@@ -87,25 +105,24 @@ var CONFIG = {
     if (foco) tabs[nome].focus();
   }
   tabs.contrato.addEventListener('click', function () { abrirAba('contrato'); });
-  tabs.conversa.addEventListener('click', function () { abrirAba('conversa'); });
+  tabs.conversa.addEventListener('click', function () { abrirAba('conversa'); track('aba_especialista'); });
   $('.tabs').addEventListener('keydown', function (e) {
     if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
     abrirAba(tabs.contrato.getAttribute('aria-selected') === 'true' ? 'conversa' : 'contrato', true);
   });
 
-  // links que levam ao formulário escolhem a aba e, se houver, o plano
-  $$('[data-modo]').forEach(function (a) {
-    a.addEventListener('click', function () {
-      abrirAba(a.getAttribute('data-modo'));
-      var plano = a.getAttribute('data-plano');
-      if (plano) {
-        var r = $('#form-etapa1 input[name="plano"][value="' + plano + '"]');
-        if (r) r.checked = true;
-      }
+  // links "falar com um especialista" no corpo da página
+  $$('a[data-modo]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var modo = a.getAttribute('data-modo');
+      abrirAba(modo);
+      if (desktop.matches) e.preventDefault();
+      var alvo = modo === 'conversa' ? $('#f-conversa').elements.nome : null;
+      realcar(alvo);
     });
   });
 
-  /* ---------- máscaras ---------- */
+  /* ---------- máscaras e validação ---------- */
   function digits(v) { return (v || '').replace(/\D/g, ''); }
   function maskCnpj(v) {
     var d = digits(v).slice(0, 14);
@@ -136,14 +153,16 @@ var CONFIG = {
       return r < 2 ? 0 : 11 - r;
     }
     var d1 = dv(c.slice(0, 12));
-    var d2 = dv(c.slice(0, 12) + d1);
-    return +c[12] === d1 && +c[13] === d2;
+    return +c[12] === d1 && +c[13] === dv(c.slice(0, 12) + d1);
   }
   var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var nomeOk = function (v) { return v.length >= 2; };
+  var emailOk = function (v) { return EMAIL_RE.test(v); };
+  var foneOk = function (v) { return !v || [10, 11].indexOf(digits(v).length) > -1; };
+  var opcEmail = function (v) { return !v || EMAIL_RE.test(v); };
 
-  /* ---------- validação ---------- */
   function setErro(input, msg) {
-    var id = (input.form ? input.form.id : 'f') + '-' + input.name + '-err';
+    var id = input.form.id + '-' + input.name + '-err';
     var el = document.getElementById(id);
     if (msg) {
       if (!el) {
@@ -179,64 +198,68 @@ var CONFIG = {
       });
     });
   }
-
-  var opcional = function (fn) { return function (v) { return !v || fn(v); }; };
-  var regrasEtapa1 = [
-    ['nome', function (v) { return v.length >= 2; }, 'Conte pra gente o seu nome.'],
-    ['email', function (v) { return EMAIL_RE.test(v); }, 'Confira o e-mail.'],
-    ['empresa', function (v) { return v.length >= 2; }, 'Informe o nome da empresa.'],
-    ['cnpj', cnpjValido, 'Confira o CNPJ: ele precisa ter 14 dígitos válidos.'],
-    ['headcount', function (v) { return +digits(v) >= 1; }, 'Informe um número aproximado de colaboradores.'],
-    ['whatsapp', opcional(function (v) { var n = digits(v).length; return n === 10 || n === 11; }), 'Informe o WhatsApp com DDD.']
-  ];
-  var regrasConversa = [
-    ['nome', function (v) { return v.length >= 2; }, 'Conte pra gente o seu nome.'],
-    ['email', function (v) { return EMAIL_RE.test(v); }, 'Confira o e-mail.'],
-    ['empresa', function (v) { return v.length >= 2; }, 'Informe o nome da empresa.'],
-    ['whatsapp', opcional(function (v) { var n = digits(v).length; return n === 10 || n === 11; }), 'Informe o WhatsApp com DDD.']
-  ];
-  var regrasEtapa2 = [
-    ['sig_email', opcional(function (v) { return EMAIL_RE.test(v); }), 'Confira o e-mail de quem assina.'],
-    ['fin_email', opcional(function (v) { return EMAIL_RE.test(v); }), 'Confira o e-mail do financeiro.']
-  ];
+  function erroGeral(form, msg) {
+    var el = $('.form-erro', form);
+    if (!el) return;
+    el.textContent = msg || '';
+    el.hidden = !msg;
+  }
 
   /* ---------- envio ---------- */
   var payloads = [];
-  function mostrarPayload(etapa, dados) {
-    if (CONFIG.mode !== 'prototype') return;
-    payloads.push('// ' + etapa + '\n' + JSON.stringify(dados, null, 2));
-    var box = $('#proto-payload');
-    box.hidden = false;
-    $('pre', box).textContent = payloads.join('\n\n');
-  }
-
   function enviar(etapa, dados) {
     if (CONFIG.mode === 'prototype') {
-      mostrarPayload(etapa, dados);
-      return new Promise(function (resolve) { setTimeout(resolve, 700); });
+      payloads.push('// ' + etapa + '\n' + JSON.stringify(dados, null, 2));
+      var box = $('#proto-payload');
+      box.hidden = false;
+      $('pre', box).textContent = payloads.join('\n\n');
+      return new Promise(function (resolve) { setTimeout(resolve, 650); });
     }
     // modo live: ligar ao proc.php (JSONP) da AC na próxima etapa do projeto
     return Promise.reject(new Error('Envio ainda não configurado.'));
   }
+  function travar(btn) { btn.disabled = true; btn.dataset.txt = btn.innerHTML; btn.textContent = 'Enviando…'; }
+  function destravar(btn) { btn.disabled = false; if (btn.dataset.txt) btn.innerHTML = btn.dataset.txt; }
 
-  function travar(btn, txt) {
-    btn.disabled = true;
-    btn.dataset.txt = btn.textContent;
-    btn.textContent = txt || 'Enviando…';
+  function atribuicao() {
+    return {
+      b2b_canal: attr.canal,
+      b2b_consultor_codigo: attr.consultor || '',
+      utm_source: attr.utm_source || '', utm_medium: attr.utm_medium || '',
+      utm_campaign: attr.utm_campaign || '', utm_content: attr.utm_content || ''
+    };
   }
-  function destravar(btn) {
-    btn.disabled = false;
-    if (btn.dataset.txt) btn.textContent = btn.dataset.txt;
-  }
-  function erroGeral(form, msg) {
-    var el = $('.form-erro', form);
-    el.textContent = msg || '';
-    el.hidden = !msg;
-  }
-  function mostrar(el) {
-    el.hidden = false;
-    el.focus({ preventScroll: true });
-    $('#form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  function merge(a, b) { Object.keys(b).forEach(function (k) { a[k] = b[k]; }); return a; }
+
+  /* ---------- etapas da trilha de contrato ---------- */
+  var ETAPAS = {
+    'f-voce': { n: 1, t: 'Etapa 1 de 3 · Você' },
+    'f-empresa': { n: 2, t: 'Etapa 2 de 3 · Empresa' },
+    'ok-solicitacao': { n: 3, t: 'Solicitação enviada · etapa 3 é opcional', feito: 2 },
+    'f-juridico': { n: 3, t: 'Etapa 3 de 3 · Dados do contrato (opcional)', feito: 2 },
+    'f-assinatura': { n: 3, t: 'Etapa 3 de 3 · Assinatura e financeiro (opcional)', feito: 2 },
+    'ok-final': { n: 3, t: 'Tudo certo', feito: 3 }
+  };
+  var atual = 'f-voce';
+  var iniciou = false;
+  function mostrarEtapa(id) {
+    atual = id;
+    Object.keys(ETAPAS).forEach(function (k) { $('#' + k).hidden = k !== id; });
+    var e = ETAPAS[id];
+    var feito = e.feito || e.n - 1;
+    $$('#prog span').forEach(function (s, i) {
+      s.className = i < feito ? 'done' : (i === e.n - 1 ? 'on' : '');
+    });
+    $('#prog-t').textContent = e.t;
+    $('#barra-t').textContent = id === 'f-voce' ? 'Solicitar contrato'
+      : (id === 'ok-final' ? 'Ver minha solicitação' : 'Continuar solicitação');
+    var alvo = $('#' + id);
+    var campo = alvo.querySelector('input:not([type=radio]):not([type=checkbox]), button');
+    $('.fc-body').scrollTop = 0;
+    if (campo && alvo.tagName === 'FORM') campo.focus({ preventScroll: true });
+    else alvo.focus({ preventScroll: true });
+    if (!desktop.matches) card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    track('etapa', { etapa: id });
   }
 
   var contato = {};
@@ -244,67 +267,95 @@ var CONFIG = {
     $$('[data-nome]', scope).forEach(function (el) { el.textContent = contato.nome ? ', ' + contato.nome.split(' ')[0] : ''; });
     $$('[data-email]', scope).forEach(function (el) { el.textContent = contato.email || 'seu e-mail'; });
   }
-
   function valorRadio(form, nome) {
     var r = form.querySelector('input[name="' + nome + '"]:checked');
     return r ? r.value : '';
   }
 
-  /* etapa 1 */
-  var f1 = $('#form-etapa1');
-  revalidarNoBlur(f1, regrasEtapa1);
-  f1.addEventListener('submit', function (e) {
+  // primeiro toque no formulário (medição de início)
+  $('#painel-contrato').addEventListener('focusin', function () {
+    if (!iniciou) { iniciou = true; track('inicio_formulario'); }
+  });
+
+  /* passo 1: você */
+  var fVoce = $('#f-voce');
+  var regrasVoce = [
+    ['nome', nomeOk, 'Conte pra gente o seu nome.'],
+    ['email', emailOk, 'Confira o e-mail.'],
+    ['whatsapp', foneOk, 'Informe o WhatsApp com DDD.']
+  ];
+  revalidarNoBlur(fVoce, regrasVoce);
+  fVoce.addEventListener('submit', function (e) {
     e.preventDefault();
-    erroGeral(f1);
-    var primeiro = validar(f1, regrasEtapa1);
-    var aceite = f1.elements.aceite;
-    var aceiteBox = aceite.closest('.aceite');
-    aceiteBox.classList.toggle('erro', !aceite.checked);
-    if (primeiro) { primeiro.focus(); return; }
+    var p = validar(fVoce, regrasVoce);
+    if (p) { p.focus(); return; }
+    var v = function (n) { return fVoce.elements[n].value.trim(); };
+    contato = { nome: v('nome'), email: v('email'), cargo: v('cargo'), whatsapp: v('whatsapp') };
+    mostrarEtapa('f-empresa');
+  });
+
+  /* passo 2: empresa + termo -> envia a solicitação (F-A) */
+  var fEmp = $('#f-empresa');
+  var regrasEmp = [
+    ['empresa', nomeOk, 'Informe o nome da empresa.'],
+    ['cnpj', cnpjValido, 'Confira o CNPJ: são 14 dígitos válidos.'],
+    ['headcount', function (v) { return +digits(v) >= 1; }, 'Informe um número aproximado.']
+  ];
+  revalidarNoBlur(fEmp, regrasEmp);
+  fEmp.addEventListener('submit', function (e) {
+    e.preventDefault();
+    erroGeral(fEmp);
+    var p = validar(fEmp, regrasEmp);
+    var aceite = fEmp.elements.aceite;
+    aceite.closest('.aceite').classList.toggle('erro', !aceite.checked);
+    if (p) { p.focus(); return; }
     if (!aceite.checked) {
-      erroGeral(f1, 'Para enviar, é preciso aceitar o Termo de Solicitação.');
+      erroGeral(fEmp, 'Para enviar, é preciso aceitar o Termo de Solicitação.');
       aceite.focus();
       return;
     }
-    var v = function (n) { return f1.elements[n].value.trim(); };
-    contato = { nome: v('nome'), email: v('email'), empresa: v('empresa'), cnpj: digits(v('cnpj')) };
+    var v = function (n) { return fEmp.elements[n].value.trim(); };
+    contato.empresa = v('empresa');
+    contato.cnpj = digits(v('cnpj'));
     var dados = {
-      contato: {
+      contato: merge({
         fullname: contato.nome,
         email: contato.email,
-        phone: v('whatsapp') ? '+55' + digits(v('whatsapp')) : '',
+        phone: contato.whatsapp ? '+55' + digits(contato.whatsapp) : '',
+        cargo_na_empresa: contato.cargo,
         nome_da_empresa: contato.empresa,
-        cargo_na_empresa: v('cargo'),
         b2b_cnpj: contato.cnpj,
         b2b_headcount: digits(v('headcount')),
-        b2b_plano_interesse: valorRadio(f1, 'plano'),
+        b2b_plano_interesse: valorRadio(fEmp, 'plano'),
         b2b_intencao: 'contrato',
         b2b_termo_versao: CONFIG.termoVersao,
-        b2b_termo_aceite_em: new Date().toISOString(),
-        b2b_canal: attr.canal,
-        b2b_consultor_codigo: attr.consultor || '',
-        utm_source: attr.utm_source || '', utm_medium: attr.utm_medium || '',
-        utm_campaign: attr.utm_campaign || '', utm_content: attr.utm_content || ''
-      },
+        b2b_termo_aceite_em: new Date().toISOString()
+      }, atribuicao()),
       tags: ['b2b_origem_sva_caju'],
       negocio: { pipeline: 'Canal Parceiros', estagio: 'Solicitação de contrato' },
       make: 'busca e-mail do consultor no Notion → notifica a Eva (consultor em cópia) → envia confirmação com o Termo'
     };
-    var btn = $('button[type="submit"]', f1);
+    var btn = $('button[type="submit"]', fEmp);
     travar(btn);
-    enviar('Etapa 1 · formulário F-A', dados).then(function () {
-      f1.hidden = true;
-      preencherConfirmacao($('#ok-etapa1'));
-      mostrar($('#ok-etapa1'));
+    enviar('Solicitação · formulário F-A', dados).then(function () {
+      destravar(btn);
+      preencherConfirmacao($('#ok-solicitacao'));
+      track('solicitacao_enviada', { plano: dados.contato.b2b_plano_interesse || 'nao_informado' });
+      mostrarEtapa('ok-solicitacao');
     }, function () {
       destravar(btn);
-      erroGeral(f1, 'Não conseguimos enviar agora. Tente de novo em instantes.');
+      erroGeral(fEmp, 'Não conseguimos enviar agora. Tente de novo em instantes.');
     });
   });
 
-  /* etapa 2 */
-  var f2 = $('#form-etapa2');
-  revalidarNoBlur(f2, regrasEtapa2);
+  $$('[data-voltar]').forEach(function (b) {
+    b.addEventListener('click', function () { mostrarEtapa(b.getAttribute('data-voltar')); });
+  });
+
+  /* passo 3 (opcional): dados do contrato */
+  var fJur = $('#f-juridico');
+  var fAss = $('#f-assinatura');
+  var juridico = {};
 
   (function mesesInicio() {
     var sel = $('#f-inicio');
@@ -318,12 +369,8 @@ var CONFIG = {
     sel.add(new Option('Ainda não sei', 'ainda não sei'));
   })();
 
-  $$('input[name="signatario"]', f2).forEach(function (r) {
-    r.addEventListener('change', function () { $('#sig-campos').hidden = valorRadio(f2, 'signatario') !== 'Outra pessoa'; });
-  });
-
   function preencherSeVazio(nome, valor) {
-    var el = f2.elements[nome];
+    var el = fJur.elements[nome];
     if (el && !el.value && valor) el.value = valor;
   }
   function buscarCnpj() {
@@ -337,115 +384,161 @@ var CONFIG = {
       .then(function (j) {
         clearTimeout(t);
         var rua = [j.descricao_tipo_de_logradouro, j.logradouro].filter(Boolean).join(' ');
-        var end = [rua, j.numero, j.complemento, j.bairro].filter(Boolean).join(', ');
         preencherSeVazio('razao_social', j.razao_social);
-        preencherSeVazio('endereco', end);
+        preencherSeVazio('endereco', [rua, j.numero, j.complemento, j.bairro].filter(Boolean).join(', '));
         preencherSeVazio('cep', j.cep ? maskCep(String(j.cep)) : '');
         preencherSeVazio('cidade_uf', j.municipio ? j.municipio + (j.uf ? ' / ' + j.uf : '') : '');
         status.textContent = 'Preenchemos com os dados públicos do CNPJ. Confira e corrija se precisar.';
       })
       .catch(function () {
         clearTimeout(t);
-        status.textContent = 'Não conseguimos buscar os dados pelo CNPJ. Pode preencher à mão ou pular.';
+        status.textContent = 'Não conseguimos buscar os dados pelo CNPJ. Preencha à mão ou pule.';
       });
   }
 
-  $('#ir-etapa2').addEventListener('click', function () {
-    $('#ok-etapa1').hidden = true;
-    f2.hidden = false;
+  $('#ir-contrato').addEventListener('click', function () {
+    mostrarEtapa('f-juridico');
     buscarCnpj();
-    $('#form-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    f2.elements.razao_social.focus({ preventScroll: true });
   });
 
-  function finalizar(pulou) {
-    $('#ok-etapa1').hidden = true;
-    f2.hidden = true;
-    var fim = $('#ok-final');
-    $('[data-final-msg]', fim).innerHTML = pulou
-      ? 'Sem problema. O contrato chega em <b data-email></b> em até <span data-sla></span>, e a equipe da Eva pede o que faltar.'
-      : 'Já temos o que precisamos. O contrato chega em <b data-email></b> em até <span data-sla></span>.';
-    $$('[data-sla]', fim).forEach(function (el) { el.textContent = CONFIG.sla; });
-    preencherConfirmacao(fim);
-    mostrar(fim);
-  }
-  $$('[data-pular]').forEach(function (b) { b.addEventListener('click', function () { finalizar(true); }); });
-
-  f2.addEventListener('submit', function (e) {
+  fJur.addEventListener('submit', function (e) {
     e.preventDefault();
-    erroGeral(f2);
-    var primeiro = validar(f2, regrasEtapa2);
-    if (primeiro) { primeiro.focus(); return; }
-    var v = function (n) { return f2.elements[n].value.trim(); };
-    var outra = valorRadio(f2, 'signatario') === 'Outra pessoa';
+    var v = function (n) { return fJur.elements[n].value.trim(); };
+    juridico = {
+      b2b_razao_social: v('razao_social'),
+      b2b_endereco: [v('endereco'), v('cidade_uf'), v('cep')].filter(Boolean).join(' · ')
+    };
+    mostrarEtapa('f-assinatura');
+  });
+
+  $$('input[name="signatario"]', fAss).forEach(function (r) {
+    r.addEventListener('change', function () { $('#sig-campos').hidden = valorRadio(fAss, 'signatario') !== 'Outra pessoa'; });
+  });
+
+  function finalizar(completo) {
+    var fim = $('#ok-final');
+    $('[data-final-msg]', fim).textContent = completo
+      ? 'Já temos o que precisamos para montar o contrato.'
+      : 'Sem problema. A equipe da Eva pede o que faltar quando enviar o contrato.';
+    preencherConfirmacao(fim);
+    preencherSla(fim);
+    mostrarEtapa('ok-final');
+  }
+
+  function enviarContrato(extra, btn) {
     var dados = {
-      contato: {
-        email: contato.email,
-        b2b_razao_social: v('razao_social'),
-        b2b_endereco: [v('endereco'), v('cidade_uf'), v('cep')].filter(Boolean).join(' · '),
-        b2b_signatario_nome: outra ? v('sig_nome') : contato.nome,
-        b2b_signatario_cargo: outra ? v('sig_cargo') : '',
-        b2b_signatario_email: outra ? v('sig_email') : contato.email,
-        b2b_financeiro_nome: v('fin_nome'),
-        b2b_financeiro_email: v('fin_email'),
-        b2b_inicio_previsto: v('inicio'),
-        b2b_observacoes: v('obs')
-      },
+      contato: merge(merge({ email: contato.email }, juridico), extra || {}),
       negocio: { estagio: 'Dados completos (via automação)' }
     };
-    var btn = $('button[type="submit"]', f2);
-    travar(btn);
-    enviar('Etapa 2 · formulário F-B', dados).then(function () { finalizar(false); }, function () {
-      destravar(btn);
-      erroGeral(f2, 'Não conseguimos enviar agora. Tente de novo em instantes.');
+    if (btn) travar(btn);
+    return enviar('Dados do contrato · formulário F-B', dados).then(function () {
+      if (btn) destravar(btn);
+      track('contrato_completo');
+      finalizar(true);
+    }, function () {
+      if (btn) destravar(btn);
+      erroGeral(fAss, 'Não conseguimos enviar agora. Tente de novo em instantes.');
+    });
+  }
+
+  var regrasAss = [
+    ['sig_email', opcEmail, 'Confira o e-mail de quem assina.'],
+    ['fin_email', opcEmail, 'Confira o e-mail do financeiro.']
+  ];
+  revalidarNoBlur(fAss, regrasAss);
+  fAss.addEventListener('submit', function (e) {
+    e.preventDefault();
+    erroGeral(fAss);
+    var p = validar(fAss, regrasAss);
+    if (p) { p.focus(); return; }
+    var v = function (n) { return fAss.elements[n].value.trim(); };
+    var outra = valorRadio(fAss, 'signatario') === 'Outra pessoa';
+    enviarContrato({
+      b2b_signatario_nome: outra ? v('sig_nome') : contato.nome,
+      b2b_signatario_cargo: outra ? v('sig_cargo') : contato.cargo,
+      b2b_signatario_email: outra ? v('sig_email') : contato.email,
+      b2b_financeiro_email: v('fin_email'),
+      b2b_inicio_previsto: v('inicio'),
+      b2b_observacoes: v('obs')
+    }, $('button[type="submit"]', fAss));
+  });
+
+  // "pular": da confirmação encerra; dos dados jurídicos vai à assinatura;
+  // da assinatura envia o que já foi preenchido (se houver)
+  $$('[data-pular]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      track('pulou', { etapa: atual });
+      if (atual === 'f-juridico') { juridico = {}; mostrarEtapa('f-assinatura'); return; }
+      if (atual === 'f-assinatura' && (juridico.b2b_razao_social || juridico.b2b_endereco)) { enviarContrato(null, null); return; }
+      finalizar(false);
     });
   });
 
-  /* conversa */
-  var fc = $('#form-conversa');
-  revalidarNoBlur(fc, regrasConversa);
-  fc.addEventListener('submit', function (e) {
+  /* ---------- planos: escolhe o plano no formulário ---------- */
+  $$('[data-plano]').forEach(function (b) {
+    b.addEventListener('click', function () {
+      var r = $('#f-empresa input[name="plano"][value="' + b.getAttribute('data-plano') + '"]');
+      if (r) r.checked = true;
+      abrirAba('contrato');
+      track('plano_escolhido', { plano: b.getAttribute('data-plano') });
+      var foco = null;
+      if (atual === 'f-voce') foco = fVoce.elements.nome.value ? fVoce.querySelector('button[type=submit]') : fVoce.elements.nome;
+      else if (atual === 'f-empresa') foco = fEmp.elements.empresa;
+      realcar(foco);
+    });
+  });
+
+  /* ---------- falar com especialista ---------- */
+  var fConv = $('#f-conversa');
+  var regrasConv = [
+    ['nome', nomeOk, 'Conte pra gente o seu nome.'],
+    ['email', emailOk, 'Confira o e-mail.'],
+    ['empresa', nomeOk, 'Informe o nome da empresa.'],
+    ['whatsapp', foneOk, 'Informe o WhatsApp com DDD.']
+  ];
+  revalidarNoBlur(fConv, regrasConv);
+  fConv.addEventListener('submit', function (e) {
     e.preventDefault();
-    erroGeral(fc);
-    var primeiro = validar(fc, regrasConversa);
-    if (primeiro) { primeiro.focus(); return; }
-    var v = function (n) { return fc.elements[n].value.trim(); };
-    contato = { nome: v('nome'), email: v('email'), empresa: v('empresa') };
+    erroGeral(fConv);
+    var p = validar(fConv, regrasConv);
+    if (p) { p.focus(); return; }
+    var v = function (n) { return fConv.elements[n].value.trim(); };
+    contato = merge(contato, { nome: v('nome'), email: v('email'), empresa: v('empresa'), whatsapp: v('whatsapp') });
     var dados = {
-      contato: {
+      contato: merge({
         fullname: contato.nome,
         email: contato.email,
-        phone: v('whatsapp') ? '+55' + digits(v('whatsapp')) : '',
+        phone: contato.whatsapp ? '+55' + digits(contato.whatsapp) : '',
         nome_da_empresa: contato.empresa,
-        b2b_intencao: 'conversa',
-        b2b_observacoes: v('mensagem'),
-        b2b_canal: attr.canal,
-        b2b_consultor_codigo: attr.consultor || '',
-        utm_source: attr.utm_source || '', utm_medium: attr.utm_medium || '',
-        utm_campaign: attr.utm_campaign || '', utm_content: attr.utm_content || ''
-      },
+        b2b_intencao: 'especialista',
+        b2b_observacoes: v('mensagem')
+      }, atribuicao()),
       tags: ['b2b_origem_sva_caju'],
       negocio: { pipeline: 'Canal Parceiros', estagio: 'Contato solicitado' },
       make: 'busca e-mail do consultor no Notion → notifica a Eva para responder (consultor em cópia)'
     };
-    var btn = $('button[type="submit"]', fc);
+    var btn = $('button[type="submit"]', fConv);
     travar(btn);
-    enviar('Prefiro conversar · formulário F-A', dados).then(function () {
-      fc.hidden = true;
+    enviar('Falar com especialista · formulário F-A', dados).then(function () {
+      destravar(btn);
+      fConv.hidden = true;
       preencherConfirmacao($('#ok-conversa'));
-      mostrar($('#ok-conversa'));
+      $('#ok-conversa').hidden = false;
+      $('#ok-conversa').focus({ preventScroll: true });
+      track('especialista_enviado');
     }, function () {
       destravar(btn);
-      erroGeral(fc, 'Não conseguimos enviar agora. Tente de novo em instantes.');
+      erroGeral(fConv, 'Não conseguimos enviar agora. Tente de novo em instantes.');
     });
   });
 
-  // da confirmação da conversa para a trilha de contrato, aproveitando o que já foi digitado
+  // da conversa para o contrato, aproveitando o que já foi digitado
   $$('[data-ir-contrato]').forEach(function (b) {
     b.addEventListener('click', function () {
-      ['nome', 'email', 'empresa'].forEach(function (n) { if (!f1.elements[n].value) f1.elements[n].value = contato[n] || ''; });
+      ['nome', 'email', 'whatsapp'].forEach(function (n) { if (!fVoce.elements[n].value) fVoce.elements[n].value = contato[n] || ''; });
+      if (!fEmp.elements.empresa.value) fEmp.elements.empresa.value = contato.empresa || '';
       abrirAba('contrato');
-      f1.elements.cnpj.focus();
+      if (atual === 'f-voce') mostrarEtapa('f-voce');
     });
   });
 
@@ -455,6 +548,7 @@ var CONFIG = {
     b.addEventListener('click', function () {
       if (typeof termo.showModal === 'function') termo.showModal();
       else termo.setAttribute('open', '');
+      track('termo_aberto');
     });
   });
   termo.addEventListener('click', function (e) { if (e.target === termo) termo.close(); });

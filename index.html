@@ -4,455 +4,381 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Eva Maternidade para clientes Caju</title>
-<meta name="description" content="Benefício de cuidado contínuo da jornada materna para empresas clientes Caju. Solicite o contrato com a condição especial da parceria.">
+<meta name="description" content="Benefício de cuidado contínuo na maternidade para empresas clientes Caju. Envie os dados e receba o contrato com a condição especial da parceria.">
 <!-- protótipo: fora dos buscadores até a validação -->
 <meta name="robots" content="noindex, nofollow">
-<meta name="theme-color" content="#123A2D">
+<meta name="theme-color" content="#E4F5FB">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3l7.5 3v5.2c0 4.6-3.1 8.4-7.5 9.8-4.4-1.4-7.5-5.2-7.5-9.8V6z"/><path d="M8.8 12.2l2.2 2.2 4.2-4.4"/></symbol>
+  <symbol id="i-doc" viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5M9 13h6M9 17h4"/></symbol>
+  <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 20s-7.5-4.6-7.5-10A4.3 4.3 0 0 1 12 7.4 4.3 4.3 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2.4"/><circle cx="18" cy="6" r="2.4"/><path d="M8.4 18H15a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h6.6"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M10.5 9.5v5l4-2.5z"/></symbol>
+  <symbol id="i-chat" viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.1A8 8 0 1 1 20 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></symbol>
+  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16"/><path d="M8 16v-4M12 16V8M16 16v-6"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><path d="M19 12H5M11 18l-6-6 6-6"/></symbol>
+</svg>
+
 <a class="skip" href="#solicitar">Pular para o formulário</a>
 
-<div class="proto-flag" id="proto-flag" hidden>
-  <span>Protótipo para validação. O formulário não envia dados.</span>
-</div>
-
 <header class="top">
-  <div class="wrap">
-    <a class="brand" href="#topo" aria-label="Eva Maternidade, início">
-      <img src="assets/img/logo-eva-verde.svg" alt="Eva Maternidade" width="188" height="38">
-      <span class="selo-caju" aria-label="em parceria com Caju"><span class="x" aria-hidden="true">×</span> Caju</span>
+  <div class="wrap top-in">
+    <a class="lockup" href="#topo" aria-label="Eva Maternidade em parceria com Caju, início">
+      <img class="logo-eva" src="assets/img/logo-eva-cor.svg" alt="Eva Maternidade" width="188" height="38">
+      <span class="lockup-x" aria-hidden="true">×</span>
+      <img class="logo-caju" src="assets/img/logo-caju.svg" alt="Caju" width="74" height="30">
     </a>
     <nav class="top-nav" aria-label="Seções">
+      <a href="#entrega">O que inclui</a>
       <a href="#planos">Planos</a>
-      <a href="#contratacao">Como contratar</a>
+      <a href="#contratacao">Como funciona</a>
       <a href="#faq">Dúvidas</a>
     </nav>
-    <a class="btn btn-sm" href="#solicitar" data-modo="contrato">Solicitar contrato</a>
   </div>
 </header>
 
 <main id="topo">
 
-  <!-- 1. HERO -->
-  <section class="hero">
-    <div class="wrap hero-grid">
-      <div class="hero-copy">
-        <p class="pill"><span class="dot" aria-hidden="true"></span>Benefício para empresas clientes Caju</p>
-        <h1>A maternidade não afasta mulheres do trabalho.<br><em>A falta de apoio, sim.</em></h1>
-        <p class="lead">A Eva Maternidade acompanha suas colaboradoras da tentativa de engravidar ao retorno ao trabalho, com jornada guiada, especialistas e um painel para o RH. Clientes Caju contratam com condição especial de parceria.</p>
-        <div class="ctas">
-          <a class="btn btn-lg" href="#solicitar" data-modo="contrato">Enviar dados para contrato</a>
-          <a class="link-cta" href="#solicitar" data-modo="conversa">Prefiro conversar antes <span aria-hidden="true">→</span></a>
-        </div>
-        <p class="note"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>Enviar os dados não gera cobrança nem compromisso. A contratação só acontece com o contrato assinado.</p>
-      </div>
-      <div class="hero-media">
-        <img src="assets/img/hero-mae-trabalho.webp" alt="Mulher sorrindo com o bebê no colo, diante do notebook" width="1092" height="1249" fetchpriority="high">
-      </div>
-    </div>
-  </section>
-
-  <!-- fases -->
-  <section class="fases" aria-labelledby="fases-t">
-    <div class="wrap">
-      <h2 id="fases-t" class="fases-t">Uma jornada, seis momentos</h2>
-      <ol class="fases-list">
-        <li>Tentante</li>
-        <li>Gestante</li>
-        <li>Mãe de anjo</li>
-        <li>Puérpera</li>
-        <li>Adotante</li>
-        <li>Retorno ao trabalho</li>
-      </ol>
-    </div>
-  </section>
-
-  <!-- 2. PROBLEMA -->
-  <section class="problema escuro" aria-labelledby="problema-t">
-    <img class="laco laco-problema" src="assets/img/laco-magenta.webp" alt="" aria-hidden="true" width="900" height="361">
-    <div class="wrap problema-grid">
-      <div class="reveal">
-        <p class="kicker">Por que isso é assunto do RH</p>
-        <h2 id="problema-t">A licença termina. A transformação, não.</h2>
-        <p>A maternidade reorganiza saúde, rotina, identidade e a relação com a carreira. E esse percurso não cabe nos meses da licença: começa na tentativa de engravidar, passa por perdas que quase ninguém vê e continua muito depois do retorno.</p>
-        <p>Quando ele não encontra apoio, a empresa sente. No retorno difícil, no isolamento, na saída de quem ela queria manter.</p>
-        <p class="frase">Ações pontuais acolhem momentos. Uma jornada contínua precisa de estrutura.</p>
-      </div>
-      <figure class="stat reveal">
-        <p class="stat-n">97,5%</p>
-        <p class="stat-t">das mães que trabalham disseram que ficariam mais tempo em uma empresa que apoiasse de verdade quem é mãe.</p>
-        <figcaption>Pesquisa Executive Moms com 479 mães trabalhadoras. É intenção declarada, não retenção medida.</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <!-- 3. O QUE A EVA ENTREGA -->
-  <section class="entrega" aria-labelledby="entrega-t">
-    <div class="wrap entrega-grid">
-      <div class="entrega-media reveal">
-        <img src="assets/img/app-mockups.webp" alt="Telas do aplicativo Eva Maternidade: jornada, conteúdos e chat" width="1000" height="916" loading="lazy">
-      </div>
-      <div>
-        <p class="kicker">O que a Eva entrega</p>
-        <h2 id="entrega-t">Cuidado contínuo, no celular da colaboradora</h2>
-        <ul class="pilares">
-          <li class="reveal">
-            <span class="n">01</span>
-            <h3>Jornada guiada</h3>
-            <p>Trilhas por fase, semana a semana, com recomendações que acompanham o momento de cada uma.</p>
-          </li>
-          <li class="reveal">
-            <span class="n">02</span>
-            <h3>Conteúdo e comunidade</h3>
-            <p>Cursos e conteúdos feitos por especialistas, aulas ao vivo e círculos de conversa com mulheres que vivem o mesmo momento.</p>
-          </li>
-          <li class="reveal">
-            <span class="n">03</span>
-            <h3>Checkpoints e especialistas</h3>
-            <p>Perguntas rápidas que identificam necessidades e direcionam para o cuidado certo. No plano Cuidado, chat com obstetrizes e consultas.</p>
-          </li>
-          <li class="reveal">
-            <span class="n">04</span>
-            <h3>Dados para o RH</h3>
-            <p>App com a marca da sua empresa e um painel com indicadores agregados, sem expor ninguém.</p>
-          </li>
+  <!-- abertura -->
+  <section class="hero" aria-labelledby="hero-t">
+    <div class="wrap col">
+      <div class="hero-txt">
+        <p class="selo"><img src="assets/img/logo-caju.svg" alt="" width="44" height="18"><span>Condição exclusiva para clientes Caju</span></p>
+        <h1 id="hero-t">Cuidado contínuo na maternidade para as suas colaboradoras</h1>
+        <p class="lead">Da tentativa de engravidar ao retorno ao trabalho, a Eva Maternidade acompanha cada fase pelo app, com especialistas e um painel para o RH. Envie os dados e receba o contrato com a condição da parceria.</p>
+        <ul class="garantias">
+          <li><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg>Sem compromisso até assinar</li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-doc"/></svg><span>Contrato em até <span data-sla>2 dias úteis</span></span></li>
+          <li><svg class="i" aria-hidden="true"><use href="#i-heart"/></svg>A colaboradora não paga nada</li>
         </ul>
+        <p class="hero-alt">Prefere tirar dúvidas antes? <a href="#solicitar" data-modo="conversa">Falar com um especialista</a></p>
       </div>
+      <img class="hero-foto" src="assets/img/hero-mae-trabalho.webp" alt="Mulher sorrindo com o bebê no colo, diante do notebook" width="1092" height="1249" fetchpriority="high">
     </div>
   </section>
 
-  <!-- 4. PLANOS -->
-  <section class="planos" id="planos" aria-labelledby="planos-t">
-    <div class="wrap">
-      <div class="head reveal">
-        <p class="kicker">Planos</p>
-        <h2 id="planos-t">Dois planos. Você escolhe a profundidade do cuidado.</h2>
-        <p>Os valores e a condição especial da parceria Caju vêm no contrato que você recebe depois de enviar os dados.</p>
-      </div>
-
-      <div class="planos-grid">
-        <article class="plano reveal">
-          <header>
-            <p class="plano-tag">Essencial</p>
-            <h3>A jornada completa no app</h3>
-            <p>Para dar a todas as colaboradoras orientação, conteúdo e comunidade em cada fase.</p>
-          </header>
-          <ul class="lista">
-            <li>App com a marca da empresa</li>
-            <li>Jornada guiada por fase, semana a semana</li>
-            <li>Conteúdos e cursos com especialistas</li>
-            <li>Comunidade</li>
-            <li>Checkpoints automáticos de acompanhamento</li>
-            <li>Painel do RH com indicadores de engajamento</li>
-          </ul>
-          <a class="btn btn-outline btn-full" href="#solicitar" data-modo="contrato" data-plano="Essencial">Quero o Essencial</a>
-        </article>
-
-        <article class="plano plano-destaque reveal">
-          <header>
-            <p class="plano-tag">Cuidado</p>
-            <h3>Tudo do Essencial, com acompanhamento clínico</h3>
-            <p>Para quando a empresa quer que a colaboradora tenha a quem recorrer, além do conteúdo.</p>
-          </header>
-          <ul class="lista">
-            <li><b>Tudo do Essencial</b></li>
-            <li>Chat com a equipe de obstetrizes, com prazo de resposta</li>
-            <li>2 consultas por ano com obstetriz para cada mulher em jornada</li>
-            <li>Rastreio de saúde mental com escala validada</li>
-            <li>Acompanhamento de condições clínicas</li>
-            <li>Painel do RH completo</li>
-          </ul>
-          <a class="btn btn-full" href="#solicitar" data-modo="contrato" data-plano="Cuidado">Quero o Cuidado</a>
-        </article>
-      </div>
-
-      <p class="planos-nota reveal">O Essencial mostra ao RH que o benefício está sendo usado. O Cuidado mostra também o que está acontecendo com as colaboradoras e o que fazer a respeito, sempre com dados agregados. Os planos não se somam: o Cuidado substitui o Essencial. <a href="#solicitar" data-modo="contrato" data-plano="Quero ajuda para escolher">Não sabe qual escolher? A gente ajuda.</a></p>
+  <!-- formulário: fixo à direita no desktop, logo após a abertura no celular -->
+  <aside class="form-card" id="solicitar" aria-labelledby="form-t">
+    <div class="fc-head">
+      <p class="fc-selo"><img src="assets/img/logo-caju.svg" alt="" width="40" height="16">Parceria Caju</p>
+      <h2 id="form-t">Solicite seu contrato</h2>
     </div>
-  </section>
 
-  <!-- 5. PARA O RH -->
-  <section class="rh" aria-labelledby="rh-t">
-    <div class="wrap rh-grid">
-      <div class="reveal">
-        <p class="kicker">Para o RH</p>
-        <h2 id="rh-t">O RH acompanha. Ninguém fica exposto.</h2>
-        <ul class="rh-list">
-          <li>
-            <h3>Indicadores agregados</h3>
-            <p>Adesão, engajamento e distribuição por fase da jornada, para planejar ações e mostrar o resultado do benefício.</p>
-          </li>
-          <li>
-            <h3>Privacidade desde o desenho</h3>
-            <p>O que a colaboradora conta fica entre ela e a equipe de cuidado. O RH vê números agregados, e a Caju não tem acesso a dados de saúde.</p>
-          </li>
-          <li>
-            <h3>Complementa o plano de saúde</h3>
-            <p>A Eva não substitui o plano. É uma camada de orientação, acolhimento e acompanhamento que o cuidado clínico tradicional nem sempre integra.</p>
-          </li>
-        </ul>
-      </div>
-      <figure class="painel reveal" aria-label="Ilustração do painel do RH">
-        <div class="painel-top">
-          <span class="painel-logo">Painel do RH</span>
-          <span class="painel-chip">Últimos 90 dias</span>
-        </div>
-        <div class="painel-kpis">
-          <div><span>Adesão</span><i style="--w:68%"></i></div>
-          <div><span>Engajamento</span><i style="--w:54%"></i></div>
-        </div>
-        <p class="painel-sub">Colaboradoras por fase</p>
-        <ul class="painel-barras">
-          <li><span>Tentante</span><i style="--w:46%"></i></li>
-          <li><span>Gestante</span><i style="--w:72%"></i></li>
-          <li><span>Puérpera</span><i style="--w:58%"></i></li>
-          <li><span>Retorno</span><i style="--w:38%"></i></li>
-        </ul>
-        <figcaption>Ilustração. Não mostra dados reais.</figcaption>
-      </figure>
+    <div class="tabs" role="tablist" aria-label="Como você quer seguir">
+      <button type="button" role="tab" id="tab-contrato" aria-controls="painel-contrato" aria-selected="true">Solicitar contrato</button>
+      <button type="button" role="tab" id="tab-conversa" aria-controls="painel-conversa" aria-selected="false" tabindex="-1">Falar com especialista</button>
     </div>
-  </section>
 
-  <!-- 6. ORIGEM -->
-  <section class="origem" aria-labelledby="origem-t">
-    <div class="wrap origem-grid">
-      <figure class="origem-foto reveal">
-        <img src="assets/img/mariana-rios.webp" alt="Mariana Rios" width="862" height="1016" loading="lazy">
-        <figcaption>Mariana Rios · Basta Sentir</figcaption>
-      </figure>
-      <div class="reveal">
-        <p class="kicker">De onde a Eva vem</p>
-        <h2 id="origem-t">Nasceu da escuta de experiências reais</h2>
-        <p>Das tentativas, dos tratamentos, das perdas, das mudanças da gestação, das incertezas do puerpério e da volta ao trabalho.</p>
-        <p>O Basta Sentir mostrou a força do acolhimento e da comunidade. A Eva Saúde trouxe a estrutura clínica, tecnológica e multidisciplinar. A Eva Maternidade junta as duas coisas em uma jornada contínua de cuidado.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 7. COMO FUNCIONA A CONTRATAÇÃO -->
-  <section class="contratacao" id="contratacao" aria-labelledby="contratacao-t">
-    <div class="wrap">
-      <div class="head reveal">
-        <p class="kicker">Como contratar</p>
-        <h2 id="contratacao-t">Três passos, e só o terceiro é compromisso</h2>
-      </div>
-      <ol class="passos">
-        <li class="reveal">
-          <span class="passo-n">1</span>
-          <h3>Envie os dados</h3>
-          <p>Leva uns dois minutos. Pedimos só o necessário para montar o contrato; o resto pode vir depois.</p>
-        </li>
-        <li class="reveal">
-          <span class="passo-n">2</span>
-          <h3>Receba o contrato</h3>
-          <p>Em até <span data-sla>2 dias úteis</span>, com valores, escopo e prazos. Seu jurídico revisa com calma.</p>
-        </li>
-        <li class="reveal">
-          <span class="passo-n">3</span>
-          <h3>Assine e comece</h3>
-          <p>Com o contrato assinado, a equipe Eva conduz a implantação junto com o RH.</p>
-        </li>
-      </ol>
-      <p class="aviso reveal"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg><span><b>Enviar a solicitação não é contratar.</b> Nada é cobrado e nada é ativado antes da assinatura do contrato.</span></p>
-    </div>
-  </section>
-
-  <!-- 8. FORMULÁRIO -->
-  <section class="solicitar" id="solicitar" aria-labelledby="solicitar-t">
-    <div class="wrap solicitar-grid">
-      <div class="solicitar-intro">
-        <p class="kicker">Solicitação</p>
-        <h2 id="solicitar-t">Peça seu contrato com a condição Caju</h2>
-        <p>Preencha o que tiver em mãos. Se faltar alguma informação, a equipe da Eva pede depois.</p>
-        <ul class="check-list">
-          <li>Sem cobrança e sem compromisso até a assinatura</li>
-          <li>Contrato no seu e-mail em até <span data-sla>2 dias úteis</span></li>
-          <li>Condição especial da parceria Caju garantida para a sua solicitação</li>
-        </ul>
-        <img class="solicitar-foto" src="assets/img/grupo-mulheres.webp" alt="Grupo de mulheres conversando, uma delas grávida e outra com um bebê no colo" width="799" height="1000" loading="lazy">
-      </div>
-
-      <div class="form-card" id="form-card">
-        <div class="tabs" role="tablist" aria-label="Como você quer seguir">
-          <button type="button" role="tab" id="tab-contrato" aria-controls="painel-contrato" aria-selected="true">Enviar dados para contrato</button>
-          <button type="button" role="tab" id="tab-conversa" aria-controls="painel-conversa" aria-selected="false" tabindex="-1">Prefiro conversar antes</button>
+    <div class="fc-body">
+      <!-- trilha: contrato -->
+      <div class="aba" id="painel-contrato" role="tabpanel" aria-labelledby="tab-contrato">
+        <div class="prog" id="prog" aria-hidden="true">
+          <span class="on"></span><span></span><span></span>
+          <b id="prog-t">Etapa 1 de 3 · Você</b>
         </div>
 
-        <!-- trilha: contrato -->
-        <div class="aba" id="painel-contrato" role="tabpanel" aria-labelledby="tab-contrato">
-
-          <!-- etapa 1 -->
-          <form id="form-etapa1" novalidate>
-            <p class="etapa">Etapa 1 de 2 · <span>dados para a solicitação</span></p>
-            <div class="grid-2">
-              <label class="f"><span>Seu nome <i>*</i></span>
-                <input name="nome" type="text" autocomplete="name" required>
-              </label>
-              <label class="f"><span>E-mail corporativo <i>*</i></span>
-                <input name="email" type="email" autocomplete="email" inputmode="email" required>
-              </label>
-              <label class="f"><span>Empresa <i>*</i></span>
-                <input name="empresa" type="text" autocomplete="organization" required>
-              </label>
-              <label class="f"><span>CNPJ <i>*</i></span>
-                <input name="cnpj" type="text" inputmode="numeric" placeholder="00.000.000/0000-00" required>
-              </label>
-              <label class="f"><span>Nº aproximado de colaboradores <i>*</i></span>
-                <input name="headcount" type="text" inputmode="numeric" placeholder="Ex.: 350" required>
-              </label>
-              <label class="f"><span>Seu cargo</span>
-                <input name="cargo" type="text" autocomplete="organization-title">
-              </label>
-              <label class="f f-full"><span>WhatsApp</span>
-                <input name="whatsapp" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(11) 90000-0000">
-              </label>
-            </div>
-            <fieldset class="f f-full opcoes">
-              <legend>Plano de interesse</legend>
-              <label><input type="radio" name="plano" value="Essencial"><span>Essencial</span></label>
-              <label><input type="radio" name="plano" value="Cuidado"><span>Cuidado</span></label>
-              <label><input type="radio" name="plano" value="Quero ajuda para escolher"><span>Quero ajuda para escolher</span></label>
-            </fieldset>
-            <label class="aceite f-full">
-              <input type="checkbox" name="aceite" required>
-              <span>Li e aceito o <button type="button" class="link" data-abre-termo>Termo de Solicitação de Contratação</button>. Entendo que a contratação só acontece com a assinatura do contrato. <i>*</i></span>
+        <!-- passo 1: você -->
+        <form id="f-voce" class="passo" novalidate>
+          <label class="f"><span>Seu nome <i>*</i></span>
+            <input name="nome" type="text" autocomplete="name" required>
+          </label>
+          <label class="f"><span>E-mail corporativo <i>*</i></span>
+            <input name="email" type="email" autocomplete="email" inputmode="email" required>
+          </label>
+          <div class="g2">
+            <label class="f"><span>Cargo</span>
+              <input name="cargo" type="text" autocomplete="organization-title">
             </label>
-            <p class="form-erro" role="alert" hidden></p>
-            <button class="btn btn-lg btn-full" type="submit">Enviar dados para contrato</button>
-            <p class="micro">Campos com * são obrigatórios.</p>
-          </form>
-
-          <!-- confirmação da etapa 1 + convite para a etapa 2 -->
-          <div class="ok" id="ok-etapa1" tabindex="-1" hidden>
-            <span class="ok-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
-            <h3>Solicitação recebida<span data-nome></span>.</h3>
-            <p>Em até <span data-sla>2 dias úteis</span> você recebe o contrato em <b data-email></b>.</p>
-            <div class="convite">
-              <p><b>Quer adiantar os dados do contrato?</b> Razão social, quem assina e o contato financeiro. Leva um minuto e encurta o caminho até a assinatura.</p>
-              <div class="convite-btns">
-                <button type="button" class="btn" id="ir-etapa2">Completar agora</button>
-                <button type="button" class="btn btn-ghost" data-pular>Pular, a Eva me procura</button>
-              </div>
-            </div>
+            <label class="f"><span>WhatsApp</span>
+              <input name="whatsapp" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(11) 90000-0000">
+            </label>
           </div>
+          <button class="btn btn-full" type="submit">Continuar<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+        </form>
 
-          <!-- etapa 2 -->
-          <form id="form-etapa2" novalidate hidden>
-            <p class="etapa">Etapa 2 de 2 · <span>dados do contrato (opcional)</span></p>
-            <p class="cnpj-status" id="cnpj-status" aria-live="polite"></p>
-            <div class="grid-2">
-              <label class="f f-full"><span>Razão social</span>
-                <input name="razao_social" type="text">
-              </label>
-              <label class="f"><span>CEP</span>
-                <input name="cep" type="text" inputmode="numeric" autocomplete="postal-code">
-              </label>
-              <label class="f"><span>Cidade / UF</span>
-                <input name="cidade_uf" type="text">
-              </label>
-              <label class="f f-full"><span>Endereço</span>
-                <input name="endereco" type="text" autocomplete="street-address">
-              </label>
-            </div>
+        <!-- passo 2: empresa + aceite (envia a solicitação) -->
+        <form id="f-empresa" class="passo" novalidate hidden>
+          <label class="f"><span>Empresa <i>*</i></span>
+            <input name="empresa" type="text" autocomplete="organization" required>
+          </label>
+          <div class="g2">
+            <label class="f"><span>CNPJ <i>*</i></span>
+              <input name="cnpj" type="text" inputmode="numeric" placeholder="00.000.000/0000-00" required>
+            </label>
+            <label class="f"><span>Nº de colaboradores <i>*</i></span>
+              <input name="headcount" type="text" inputmode="numeric" placeholder="Aprox., ex.: 350" required>
+            </label>
+          </div>
+          <fieldset class="chips">
+            <legend>Plano de interesse</legend>
+            <label><input type="radio" name="plano" value="Essencial"><span>Essencial</span></label>
+            <label><input type="radio" name="plano" value="Cuidado"><span>Cuidado</span></label>
+            <label><input type="radio" name="plano" value="Quero ajuda para escolher"><span>Quero ajuda</span></label>
+          </fieldset>
+          <label class="aceite">
+            <input type="checkbox" name="aceite" required>
+            <span>Li e aceito o <button type="button" class="link" data-abre-termo>Termo de Solicitação</button>. A contratação só acontece com o contrato assinado. <i>*</i></span>
+          </label>
+          <p class="form-erro" role="alert" hidden></p>
+          <button class="btn btn-full" type="submit">Enviar dados para contrato</button>
+          <button class="btn-txt" type="button" data-voltar="f-voce"><svg class="i" aria-hidden="true"><use href="#i-back"/></svg>Voltar</button>
+        </form>
 
-            <fieldset class="f f-full opcoes">
-              <legend>Quem assina o contrato?</legend>
-              <label><input type="radio" name="signatario" value="Sou eu" checked><span>Sou eu</span></label>
-              <label><input type="radio" name="signatario" value="Outra pessoa"><span>Outra pessoa</span></label>
-            </fieldset>
-            <div class="grid-2" id="sig-campos" hidden>
+        <!-- confirmação + convite à etapa opcional -->
+        <div class="ok" id="ok-solicitacao" tabindex="-1" hidden>
+          <span class="ok-ico" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></span>
+          <h3>Solicitação enviada<span data-nome></span>.</h3>
+          <p>O contrato chega em <b data-email></b> em até <span data-sla>2 dias úteis</span>, já com a condição Caju.</p>
+          <div class="convite">
+            <p><b>Quer adiantar os dados do contrato?</b> Razão social, quem assina e o financeiro. Leva um minuto.</p>
+            <button type="button" class="btn btn-full" id="ir-contrato">Adiantar agora</button>
+            <button type="button" class="btn-txt" data-pular>Agora não, a Eva me procura</button>
+          </div>
+        </div>
+
+        <!-- passo 3a: dados da empresa para o contrato (opcional) -->
+        <form id="f-juridico" class="passo" novalidate hidden>
+          <p class="cnpj-status" id="cnpj-status" aria-live="polite"></p>
+          <label class="f"><span>Razão social</span>
+            <input name="razao_social" type="text">
+          </label>
+          <div class="g2">
+            <label class="f"><span>CEP</span>
+              <input name="cep" type="text" inputmode="numeric" autocomplete="postal-code">
+            </label>
+            <label class="f"><span>Cidade / UF</span>
+              <input name="cidade_uf" type="text">
+            </label>
+          </div>
+          <label class="f"><span>Endereço</span>
+            <input name="endereco" type="text" autocomplete="street-address">
+          </label>
+          <button class="btn btn-full" type="submit">Continuar<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+          <button class="btn-txt" type="button" data-pular>Pular esta etapa</button>
+        </form>
+
+        <!-- passo 3b: assinatura e financeiro (opcional) -->
+        <form id="f-assinatura" class="passo" novalidate hidden>
+          <fieldset class="chips">
+            <legend>Quem assina o contrato?</legend>
+            <label><input type="radio" name="signatario" value="Sou eu" checked><span>Sou eu</span></label>
+            <label><input type="radio" name="signatario" value="Outra pessoa"><span>Outra pessoa</span></label>
+          </fieldset>
+          <div id="sig-campos" hidden>
+            <div class="g2">
               <label class="f"><span>Nome de quem assina</span>
                 <input name="sig_nome" type="text">
               </label>
               <label class="f"><span>Cargo</span>
                 <input name="sig_cargo" type="text">
               </label>
-              <label class="f f-full"><span>E-mail de quem assina</span>
-                <input name="sig_email" type="email" inputmode="email">
-              </label>
             </div>
-
-            <p class="sub-t">Contato financeiro <span>(para nota fiscal e boleto)</span></p>
-            <div class="grid-2">
-              <label class="f"><span>Nome</span>
-                <input name="fin_nome" type="text">
-              </label>
-              <label class="f"><span>E-mail</span>
-                <input name="fin_email" type="email" inputmode="email">
-              </label>
-              <label class="f"><span>Previsão de início</span>
-                <select name="inicio" id="f-inicio"><option value="">Selecione</option></select>
-              </label>
-              <label class="f f-full"><span>Observações</span>
-                <textarea name="obs" rows="3" placeholder="Ex.: nosso jurídico usa modelo próprio de contrato"></textarea>
-              </label>
-            </div>
-            <p class="form-erro" role="alert" hidden></p>
-            <div class="convite-btns">
-              <button class="btn btn-lg" type="submit">Enviar dados do contrato</button>
-              <button type="button" class="btn btn-ghost" data-pular>Pular esta etapa</button>
-            </div>
-          </form>
-
-          <div class="ok" id="ok-final" tabindex="-1" hidden>
-            <span class="ok-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
-            <h3>Tudo certo<span data-nome></span>.</h3>
-            <p data-final-msg>Já temos o que precisamos. O contrato chega em <b data-email></b> em até <span data-sla>2 dias úteis</span>.</p>
-            <p class="micro">Dúvidas até lá? Responda o e-mail de confirmação que acabou de chegar.</p>
+            <label class="f"><span>E-mail de quem assina</span>
+              <input name="sig_email" type="email" inputmode="email">
+            </label>
           </div>
-        </div>
-
-        <!-- trilha: conversa -->
-        <div class="aba" id="painel-conversa" role="tabpanel" aria-labelledby="tab-conversa" hidden>
-          <form id="form-conversa" novalidate>
-            <p class="etapa">Fale com a equipe da Eva</p>
-            <div class="grid-2">
-              <label class="f"><span>Seu nome <i>*</i></span>
-                <input name="nome" type="text" autocomplete="name" required>
-              </label>
-              <label class="f"><span>E-mail corporativo <i>*</i></span>
-                <input name="email" type="email" autocomplete="email" inputmode="email" required>
-              </label>
-              <label class="f"><span>Empresa <i>*</i></span>
-                <input name="empresa" type="text" autocomplete="organization" required>
-              </label>
-              <label class="f"><span>WhatsApp</span>
-                <input name="whatsapp" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(11) 90000-0000">
-              </label>
-              <label class="f f-full"><span>Sobre o que você quer conversar?</span>
-                <textarea name="mensagem" rows="3" placeholder="Ex.: entender os valores, tirar dúvidas sobre implantação"></textarea>
-              </label>
-            </div>
-            <p class="form-erro" role="alert" hidden></p>
-            <button class="btn btn-lg btn-full" type="submit">Pedir contato</button>
-            <p class="micro">A equipe da Eva responde pelo e-mail ou WhatsApp informado. Se você chegou por um consultor Caju, ele acompanha a conversa.</p>
-          </form>
-          <div class="ok" id="ok-conversa" tabindex="-1" hidden>
-            <span class="ok-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>
-            <h3>Recebemos seu pedido<span data-nome></span>.</h3>
-            <p>A equipe da Eva vai falar com você em <b data-email></b>. Se quiser adiantar, você também pode <button type="button" class="link" data-ir-contrato>enviar os dados para contrato</button>.</p>
+          <div class="g2">
+            <label class="f"><span>E-mail do financeiro</span>
+              <input name="fin_email" type="email" inputmode="email" placeholder="Para nota e boleto">
+            </label>
+            <label class="f"><span>Previsão de início</span>
+              <select name="inicio" id="f-inicio"><option value="">Selecione</option></select>
+            </label>
           </div>
-        </div>
+          <label class="f"><span>Observações</span>
+            <textarea name="obs" rows="2" placeholder="Ex.: usamos modelo próprio de contrato"></textarea>
+          </label>
+          <p class="form-erro" role="alert" hidden></p>
+          <button class="btn btn-full" type="submit">Enviar dados do contrato</button>
+          <button class="btn-txt" type="button" data-pular>Pular esta etapa</button>
+        </form>
 
-        <details class="proto-payload" id="proto-payload" hidden>
-          <summary>Protótipo: o que seria registrado na AC</summary>
-          <pre></pre>
-        </details>
+        <div class="ok" id="ok-final" tabindex="-1" hidden>
+          <span class="ok-ico" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></span>
+          <h3>Tudo certo<span data-nome></span>.</h3>
+          <p data-final-msg></p>
+          <ol class="proximos">
+            <li><b>Hoje</b> você recebe um e-mail com a cópia do Termo.</li>
+            <li><b>Em até <span data-sla>2 dias úteis</span></b>, o contrato chega para revisão.</li>
+            <li><b>Depois da assinatura</b>, a equipe Eva combina a implantação com o RH.</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- trilha: especialista -->
+      <div class="aba" id="painel-conversa" role="tabpanel" aria-labelledby="tab-conversa" hidden>
+        <form id="f-conversa" novalidate>
+          <p class="aba-intro">Uma pessoa da equipe Eva responde suas dúvidas sobre planos, valores e implantação.</p>
+          <label class="f"><span>Seu nome <i>*</i></span>
+            <input name="nome" type="text" autocomplete="name" required>
+          </label>
+          <label class="f"><span>E-mail corporativo <i>*</i></span>
+            <input name="email" type="email" autocomplete="email" inputmode="email" required>
+          </label>
+          <div class="g2">
+            <label class="f"><span>Empresa <i>*</i></span>
+              <input name="empresa" type="text" autocomplete="organization" required>
+            </label>
+            <label class="f"><span>WhatsApp</span>
+              <input name="whatsapp" type="tel" autocomplete="tel-national" inputmode="tel" placeholder="(11) 90000-0000">
+            </label>
+          </div>
+          <label class="f"><span>Sobre o que quer conversar?</span>
+            <textarea name="mensagem" rows="2" placeholder="Ex.: entender os valores"></textarea>
+          </label>
+          <p class="form-erro" role="alert" hidden></p>
+          <button class="btn btn-full" type="submit">Falar com um especialista</button>
+        </form>
+        <div class="ok" id="ok-conversa" tabindex="-1" hidden>
+          <span class="ok-ico" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></span>
+          <h3>Pedido recebido<span data-nome></span>.</h3>
+          <p>Um especialista da Eva fala com você em <b data-email></b>. Se você chegou por um consultor Caju, ele acompanha a conversa.</p>
+          <button type="button" class="btn btn-ghost btn-full" data-ir-contrato>Já quero solicitar o contrato</button>
+        </div>
+      </div>
+
+      <details class="proto-payload" id="proto-payload" hidden>
+        <summary>Protótipo: o que seria registrado na AC</summary>
+        <pre></pre>
+      </details>
+    </div>
+
+    <p class="fc-foot"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg>Sem cobrança e sem compromisso até a assinatura.</p>
+  </aside>
+
+  <!-- tese -->
+  <section class="tese" aria-labelledby="tese-t">
+    <img class="tese-foto" src="assets/img/gestante.webp" alt="Mulher grávida com a mão no peito, de olhos fechados" width="900" height="1165" loading="lazy">
+    <div class="wrap col">
+      <div class="tese-txt">
+        <h2 id="tese-t">A maternidade não afasta mulheres do trabalho. A falta de apoio, sim.</h2>
+        <p>A licença termina, a transformação não. A jornada começa na tentativa de engravidar, passa por perdas que quase ninguém vê e continua muito depois do retorno. Quando ela não encontra apoio, a empresa sente: no retorno difícil, no isolamento, na saída de quem ela queria manter.</p>
+        <p class="dado"><b>97,5%</b> das mães que trabalham disseram que ficariam mais tempo em uma empresa que apoiasse de verdade quem é mãe.<small>Pesquisa Executive Moms com 479 mães trabalhadoras. É intenção declarada, não retenção medida.</small></p>
       </div>
     </div>
   </section>
 
-  <!-- 9. FAQ -->
-  <section class="faq" id="faq" aria-labelledby="faq-t">
-    <div class="wrap faq-wrap">
-      <div class="head">
-        <p class="kicker">Dúvidas</p>
-        <h2 id="faq-t">Antes de enviar</h2>
+  <!-- o que a eva entrega -->
+  <section class="entrega" id="entrega" aria-labelledby="entrega-t">
+    <div class="wrap col">
+      <h2 id="entrega-t">Tudo acontece no app, com a marca da sua empresa</h2>
+      <ul class="recursos">
+        <li><span class="ri"><svg class="i" aria-hidden="true"><use href="#i-route"/></svg></span><div><h3>Jornada guiada</h3><p>Trilhas por fase, semana a semana: tentante, gestante, mãe de anjo, puérpera, adotante e retorno ao trabalho.</p></div></li>
+        <li><span class="ri"><svg class="i" aria-hidden="true"><use href="#i-play"/></svg></span><div><h3>Conteúdo e comunidade</h3><p>Cursos de especialistas, aulas ao vivo e rodas de conversa com mulheres que vivem o mesmo momento.</p></div></li>
+        <li><span class="ri"><svg class="i" aria-hidden="true"><use href="#i-chat"/></svg></span><div><h3>Checkpoints e especialistas</h3><p>Perguntas rápidas que identificam necessidades e levam ao cuidado certo. No plano Cuidado, chat com obstetrizes e consultas.</p></div></li>
+        <li><span class="ri"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><div><h3>Painel para o RH</h3><p>Indicadores agregados de adesão e engajamento, sem expor nenhuma colaboradora.</p></div></li>
+      </ul>
+    </div>
+    <div class="telas" aria-label="Telas do app Eva Maternidade">
+      <figure class="tela t1"><img src="assets/img/app-home.webp" alt="Tela inicial do app com a jornada Mãe de anjo e ferramentas" width="786" height="1704" loading="lazy"></figure>
+      <figure class="tela t2"><img src="assets/img/app-curso.webp" alt="Tela de curso do app: Acolhendo o luto perinatal" width="786" height="1704" loading="lazy"></figure>
+      <figure class="tela t3"><img src="assets/img/app-saude.webp" alt="Tela de saúde do app com acompanhamentos, consultas e o botão Fale com um especialista" width="786" height="1704" loading="lazy"></figure>
+    </div>
+    <p class="wrap col telas-nota">Telas do app em evolução, com dados ilustrativos.</p>
+  </section>
+
+  <!-- planos -->
+  <section class="planos" id="planos" aria-labelledby="planos-t">
+    <div class="wrap col">
+      <h2 id="planos-t">Dois planos. Você escolhe a profundidade do cuidado.</h2>
+      <p class="sec-lead">Os valores e a condição Caju vêm no contrato. O Cuidado substitui o Essencial; os planos não se somam.</p>
+      <div class="planos-grid">
+        <article class="plano">
+          <h3>Essencial</h3>
+          <p class="plano-sub">A jornada completa no app, para todas as colaboradoras.</p>
+          <ul class="lista">
+            <li>App com a marca da empresa</li>
+            <li>Jornada guiada por fase, semana a semana</li>
+            <li>Conteúdos e cursos com especialistas</li>
+            <li>Comunidade</li>
+            <li>Checkpoints automáticos de acompanhamento</li>
+            <li>Painel do RH com engajamento</li>
+          </ul>
+          <button type="button" class="btn btn-ghost btn-full" data-plano="Essencial">Quero o Essencial</button>
+        </article>
+        <article class="plano plano-cuidado">
+          <h3>Cuidado</h3>
+          <p class="plano-sub">Tudo do Essencial, com acompanhamento clínico.</p>
+          <ul class="lista">
+            <li><b>Tudo do Essencial</b></li>
+            <li>Chat com obstetrizes, com prazo de resposta</li>
+            <li>2 consultas por ano com obstetriz para cada mulher em jornada</li>
+            <li>Rastreio de saúde mental com escala validada</li>
+            <li>Acompanhamento de condições clínicas</li>
+            <li>Painel do RH completo</li>
+          </ul>
+          <button type="button" class="btn btn-full" data-plano="Cuidado">Quero o Cuidado</button>
+        </article>
       </div>
+      <p class="planos-nota">Em dúvida? <button type="button" class="link" data-plano="Quero ajuda para escolher">A gente ajuda a escolher.</button></p>
+    </div>
+  </section>
+
+  <!-- rh e privacidade -->
+  <section class="rh" aria-labelledby="rh-t">
+    <div class="wrap col">
+      <h2 id="rh-t">O RH acompanha. Ninguém fica exposto.</h2>
+      <div class="rh-grid">
+        <div>
+          <h3>Números agregados</h3>
+          <p>Adesão, engajamento e distribuição por fase da jornada, para planejar ações e mostrar o resultado do benefício.</p>
+        </div>
+        <div>
+          <h3>Privacidade desde o desenho</h3>
+          <p>O que a colaboradora conta fica entre ela e a equipe de cuidado. A Caju não tem acesso a dados de saúde.</p>
+        </div>
+        <div>
+          <h3>Complementa o plano de saúde</h3>
+          <p>Uma camada de orientação, acolhimento e acompanhamento que o cuidado clínico tradicional nem sempre integra.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- origem -->
+  <section class="origem" aria-labelledby="origem-t">
+    <img class="origem-foto" src="assets/img/mariana-rios.webp" alt="Mariana Rios" width="862" height="1016" loading="lazy">
+    <div class="wrap col">
+      <div class="origem-txt">
+        <h2 id="origem-t">Nasceu da escuta de experiências reais</h2>
+        <p>Das tentativas, dos tratamentos, das perdas, das mudanças da gestação, das incertezas do puerpério e da volta ao trabalho.</p>
+        <p>O Basta Sentir, de Mariana Rios, mostrou a força do acolhimento e da comunidade. A Eva Saúde trouxe a estrutura clínica, tecnológica e multidisciplinar. A Eva Maternidade junta as duas coisas em uma jornada contínua de cuidado.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- como funciona com a caju -->
+  <section class="contratacao" id="contratacao" aria-labelledby="contratacao-t">
+    <div class="wrap col">
+      <div class="parceria">
+        <img src="assets/img/logo-eva-cor.svg" alt="Eva Maternidade" width="188" height="38">
+        <span aria-hidden="true">×</span>
+        <img src="assets/img/logo-caju.svg" alt="Caju" width="74" height="30">
+      </div>
+      <h2 id="contratacao-t">A Caju apresenta. A Eva cuida. Você assina uma vez.</h2>
+      <ol class="passos">
+        <li><h3>Envie os dados</h3><p>Uns dois minutos, só o necessário para montar o contrato. Nada é cobrado nesta etapa.</p></li>
+        <li><h3>Receba o contrato</h3><p>Em até <span data-sla>2 dias úteis</span>, com valores, escopo, prazos e a condição Caju. Seu jurídico revisa com calma.</p></li>
+        <li><h3>Assine e comece</h3><p>Com o contrato assinado, a equipe Eva conduz a implantação junto com o RH.</p></li>
+      </ol>
+      <p class="papeis">A Caju é a parceira que apresenta a Eva às empresas clientes. Quem presta o serviço e assina o contrato com a sua empresa é a Eva Saúde.</p>
+    </div>
+  </section>
+
+  <!-- dúvidas -->
+  <section class="faq" id="faq" aria-labelledby="faq-t">
+    <div class="wrap col">
+      <h2 id="faq-t">Antes de enviar</h2>
       <div class="faq-list">
         <details>
           <summary>Ao enviar os dados, já estou contratando?</summary>
@@ -460,7 +386,7 @@
         </details>
         <details>
           <summary>Quanto custa?</summary>
-          <p>Depende do plano e do número de colaboradores. O valor vem detalhado no contrato, já com a condição especial da parceria Caju. Se preferir entender os valores antes de pedir o contrato, escolha <a href="#solicitar" data-modo="conversa">Prefiro conversar antes</a>.</p>
+          <p>Depende do plano e do número de colaboradores. O valor vem detalhado no contrato, já com a condição especial da parceria Caju. Se preferir entender os valores antes, <a href="#solicitar" data-modo="conversa">fale com um especialista</a>.</p>
         </details>
         <details>
           <summary>A colaboradora paga alguma coisa?</summary>
@@ -472,11 +398,11 @@
         </details>
         <details>
           <summary>A Eva substitui o plano de saúde?</summary>
-          <p>Não. A Eva complementa o plano com orientação, acolhimento e acompanhamento ao longo da jornada, que o cuidado clínico tradicional nem sempre integra.</p>
+          <p>Não. A Eva complementa o plano com orientação, acolhimento e acompanhamento ao longo da jornada.</p>
         </details>
         <details>
           <summary>Quem na empresa deve preencher?</summary>
-          <p>Quem estiver conduzindo o assunto: RH, benefícios ou liderança. Se outra pessoa assina o contrato, é só indicar na etapa 2, ou responder o e-mail depois.</p>
+          <p>Quem estiver conduzindo o assunto: RH, benefícios ou liderança. Se outra pessoa assina o contrato, é só indicar na última etapa, ou responder o e-mail depois.</p>
         </details>
         <details>
           <summary>O que acontece com os dados que eu envio?</summary>
@@ -488,20 +414,24 @@
 
 </main>
 
-<footer class="rodape escuro">
-  <div class="wrap rodape-grid">
-    <img src="assets/img/logo-eva-branco.svg" alt="Eva Maternidade" width="188" height="38">
-    <p>Eva Maternidade é um produto da Eva Saúde.<br>Oferta para empresas clientes Caju.</p>
-    <a class="btn btn-light btn-sm" href="#solicitar" data-modo="contrato">Solicitar contrato</a>
+<footer class="rodape">
+  <div class="wrap col rodape-in">
+    <div class="parceria parceria-sm">
+      <img src="assets/img/logo-eva-cor.svg" alt="Eva Maternidade" width="188" height="38">
+      <span aria-hidden="true">×</span>
+      <img src="assets/img/logo-caju.svg" alt="Caju" width="74" height="30">
+    </div>
+    <p>Eva Maternidade é um produto da Eva Saúde. Oferta para empresas clientes Caju.</p>
   </div>
 </footer>
 
-<!-- barra fixa no mobile -->
-<div class="barra-mobile" id="barra-mobile">
-  <a class="btn btn-full" href="#solicitar" data-modo="contrato">Enviar dados para contrato</a>
+<!-- celular: volta ao formulário -->
+<div class="barra" id="barra">
+  <a class="btn btn-full" href="#solicitar"><span id="barra-t">Solicitar contrato</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
 </div>
 
-<!-- termo -->
+<div class="proto-flag" id="proto-flag" hidden>Protótipo para validação · o formulário não envia dados</div>
+
 <dialog class="termo" id="termo" aria-labelledby="termo-t">
   <form method="dialog" class="termo-in">
     <header>
