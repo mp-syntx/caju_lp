@@ -160,7 +160,8 @@ section{position:relative;padding-block:96px}
 /* --fw: largura da foto; a coluna de texto começa sempre 24px depois dela */
 .tese{--fw:clamp(240px,calc(34vw - 120px),432px)}
 .tese .col{display:grid;grid-template-columns:max(0px,calc(var(--fw) - var(--edge) + 24px)) minmax(0,1fr);min-height:560px}
-.tese-foto{position:absolute;left:0;bottom:0;width:var(--fw);height:auto;max-width:none}
+/* a foto ocupa a faixa inteira para o laço sair pela borda de cima da seção, não pelo meio */
+.tese-foto{position:absolute;left:0;top:0;bottom:0;width:var(--fw);height:100%;max-width:none;object-fit:cover;object-position:right bottom}
 .tese-txt{grid-column:2;align-self:center;padding-block:96px}
 .tese h2{color:var(--verde-ink);font-size:clamp(28px,2.9vw,40px);font-weight:800}
 .tese-txt>p{margin-top:20px;color:#2C4A3E}
@@ -169,7 +170,7 @@ section{position:relative;padding-block:96px}
 .dado small{display:block;margin-top:8px;font-size:13px;color:#3D5C50}
 
 /* ---------- entrega ---------- */
-.entrega{background:linear-gradient(180deg,#fff 0%,var(--azul-bg) 100%);padding-bottom:0;overflow:hidden;display:flex;flex-direction:column}
+.entrega{background:linear-gradient(180deg,#fff 0%,var(--azul-bg) 55%,#CDE7F1 100%);padding-bottom:0;overflow:hidden;display:flex;flex-direction:column}
 .entrega h2{max-width:16em}
 .recursos{list-style:none;margin:40px 0 0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:28px 36px}
 .recursos li{display:flex;gap:14px;align-items:flex-start}
@@ -188,7 +189,8 @@ section{position:relative;padding-block:96px}
 .t3{left:calc(var(--gut) + 460px);transform:rotate(5deg);bottom:-190px}
 
 /* ---------- planos ---------- */
-.planos{background:var(--azul-bg)}
+/* sombra no topo: as telas do app parecem entrar por trás desta faixa */
+.planos{background:var(--azul-bg);box-shadow:inset 0 22px 28px -20px rgba(47,111,134,.32);border-top:1px solid rgba(120,192,215,.45)}
 .sec-lead{margin-top:14px;color:var(--muted);max-width:36em}
 .planos-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:36px}
 .plano{background:#fff;border-radius:var(--r);padding:28px;display:flex;flex-direction:column;box-shadow:0 10px 30px -18px rgba(47,111,134,.35)}
