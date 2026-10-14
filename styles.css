@@ -157,8 +157,10 @@ section{position:relative;padding-block:96px}
 
 /* ---------- tese ---------- */
 .tese{background:linear-gradient(160deg,var(--salvia-2),var(--salvia));padding:0;overflow:hidden}
-.tese .col{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);min-height:560px}
-.tese-foto{position:absolute;left:0;bottom:0;height:min(560px,100%);width:auto;max-width:none}
+/* --fw: largura da foto; a coluna de texto começa sempre 24px depois dela */
+.tese{--fw:clamp(240px,calc(34vw - 120px),432px)}
+.tese .col{display:grid;grid-template-columns:max(0px,calc(var(--fw) - var(--edge) + 24px)) minmax(0,1fr);min-height:560px}
+.tese-foto{position:absolute;left:0;bottom:0;width:var(--fw);height:auto;max-width:none}
 .tese-txt{grid-column:2;align-self:center;padding-block:96px}
 .tese h2{color:var(--verde-ink);font-size:clamp(28px,2.9vw,40px);font-weight:800}
 .tese-txt>p{margin-top:20px;color:#2C4A3E}
@@ -210,8 +212,11 @@ section{position:relative;padding-block:96px}
 
 /* ---------- origem ---------- */
 .origem{background:linear-gradient(160deg,#FDF0F4,var(--rosa));padding:0;overflow:hidden}
-.origem .col{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);min-height:500px}
-.origem-foto{position:absolute;left:0;bottom:0;height:min(500px,100%);width:auto;max-width:none}
+.origem{--fw:clamp(240px,calc(34vw - 120px),424px)}
+.origem .col{display:grid;grid-template-columns:max(0px,calc(var(--fw) - var(--edge) + 24px)) minmax(0,1fr);min-height:500px}
+.origem-fig{position:absolute;left:0;bottom:0;width:var(--fw);margin:0}
+.origem-foto{display:block;width:100%;height:auto;max-width:none}
+.origem-fig figcaption{position:absolute;left:24px;bottom:20px;padding:6px 14px;border-radius:999px;background:rgba(255,255,255,.92);color:var(--magenta-ink);font-size:13px;font-weight:600;line-height:1.3}
 .origem-txt{grid-column:2;align-self:center;padding-block:88px}
 .origem h2{color:var(--magenta-ink);font-weight:800}
 .origem-txt>p{margin-top:18px;color:#5C4450}
@@ -289,8 +294,7 @@ section{position:relative;padding-block:96px}
   .form-card{position:relative;max-width:560px;margin:-36px auto 0;width:calc(100% - 2 * var(--gut))}
   .hero{min-height:0}
   .hero-txt{padding-bottom:84px;max-width:min(430px,58%)}
-  .hero-foto{left:auto;right:-40px}
-  .tese .col,.origem .col{grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)}
+  .hero-foto{left:auto;right:-24px;top:auto;bottom:0;height:auto;width:min(44vw,560px)}
   .telas{height:400px}
   .barra{display:block;position:fixed;left:0;right:0;bottom:0;z-index:50;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--borda);transform:translateY(110%);transition:transform .25s cubic-bezier(.16,1,.3,1)}
   .barra.on{transform:none}
@@ -320,7 +324,7 @@ section{position:relative;padding-block:96px}
   .tese .col,.origem .col{grid-template-columns:1fr;min-height:0}
   .tese-txt,.origem-txt{grid-column:1;padding:56px 0 0}
   .tese,.origem{display:flex;flex-direction:column-reverse}
-  .tese-foto,.origem-foto{position:relative;height:auto;width:80%;max-width:340px;margin:28px 0 0}
+  .tese-foto,.origem-fig{position:relative;height:auto;width:80%;max-width:340px;margin:28px 0 0}
   .recursos,.planos-grid,.rh-grid,.passos{grid-template-columns:1fr}
   .passos::before{left:18px;right:auto;top:18px;bottom:18px;width:2px;height:auto;background:var(--caju-2)}
   .passos li{padding-left:56px}
