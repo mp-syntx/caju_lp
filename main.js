@@ -3,28 +3,41 @@
  *
  * Em `mode: 'prototype'` nada sai da página: os envios são simulados e o
  * painel "o que seria registrado na AC" mostra o payload de cada envio.
- * Para ligar à ActiveCampaign (depois da validação do fluxo), preencher
- * `CONFIG.ac` com os formulários F-A/F-B e os ids dos campos `b2b_*`, e trocar
- * `mode` para 'live' (ver ../tasks/T002_revisao-lp-caju-v2.md).
+ * Para ligar à ActiveCampaign, trocar `mode` para 'live' (ver funil/tasks/T017_fluxo-comercial-caju.md).
+ * `?envio=real` na URL liga o envio só naquela visita, para o teste de ponta a ponta.
  *
  * Fluxo da trilha de contrato (um cartão, etapas curtas):
- *   1 Você -> 2 Empresa + Termo (envia a solicitação, F-A) -> confirmação
- *   -> 3 Contrato, opcional: dados jurídicos -> assinatura/financeiro (F-B)
+ *   1 Você -> 2 Empresa + Termo (envia a solicitação) -> confirmação
+ *   -> 3 Contrato, opcional: dados jurídicos -> assinatura/financeiro
  */
 var CONFIG = {
   mode: 'prototype',
   // prazo de envio do contrato (pendente de confirmação com a Nathália)
   sla: '2 dias úteis',
   termoVersao: 'v0 · rascunho em revisão jurídica (13/10/2026)',
-  canalPadrao: 'caju',
+  origem: 'Caju',
   ac: {
     endpoint: 'https://bastasentir.activehosted.com/proc.php',
-    u: '',
-    solicitacao: { f: '', or: '' }, // F-A: etapa 2 e "falar com especialista"
-    contrato: { f: '', or: '' },    // F-B: etapa 3
-    fields: {}                      // nome semântico -> 'field[ID]'
+    // `or` muda se o formulário for salvo de novo
+    solicitacao: { u: '6AE4D98022FE1', f: '17', or: '40145aa3-1531-4f70-952c-45a43881cbc6' }, // aba "Solicitar contrato" -> etapa 26
+    especialista: { u: '6AE4D99954E95', f: '18', or: '987f0162-5b73-4a74-be1d-e590a8f28e8f' }, // aba "Falar com especialista" -> etapa 14
+    contrato: { u: '6AE4D99AACE57', f: '19', or: 'fe80f479-b391-4d87-91b5-8da5b2dab0eb' },    // etapa opcional: só atualiza o contato
+    // nome no payload -> nome no formulário; campos vazios não são enviados, para não apagar valores
+    fields: {
+      fullname: 'fullname', email: 'email', phone: 'phone',
+      nome_da_empresa: 'field[49]', porte: 'field[50]', cargo_na_empresa: 'field[51]',
+      utm_medium: 'field[26]', utm_campaign: 'field[27]', utm_source: 'field[28]', utm_content: 'field[57]',
+      b2b_funil_origem: 'field[81]', b2b_cnpj: 'field[82]', b2b_headcount: 'field[83]',
+      b2b_plano_interesse: 'field[84]', b2b_consultor_codigo: 'field[85]',
+      b2b_termo_versao: 'field[86]', b2b_termo_aceite_em: 'field[87]',
+      b2b_razao_social: 'field[88]', b2b_endereco: 'field[89]',
+      b2b_signatario_nome: 'field[90]', b2b_signatario_cargo: 'field[91]', b2b_signatario_email: 'field[92]',
+      b2b_financeiro_email: 'field[93]', b2b_inicio_previsto: 'field[94]', b2b_observacoes: 'field[95]'
+    }
   }
 };
+
+if (/[?&]envio=real\b/.test(window.location.search)) CONFIG.mode = 'live';
 
 (function () {
   'use strict';
@@ -46,8 +59,8 @@ var CONFIG = {
     window.dataLayer.push(ev);
   }
 
-  /* ---------- atribuição: canal, consultor e UTMs da URL ---------- */
-  var ATTR_KEYS = ['canal', 'consultor', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+  /* ---------- atribuição: consultor e UTMs da URL ---------- */
+  var ATTR_KEYS = ['consultor', 'utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
   var attr = (function () {
     var saved = store.get('caju_lp_attr') || {};
     var qs = new URLSearchParams(window.location.search);
@@ -57,7 +70,6 @@ var CONFIG = {
       if (v) fromUrl[k] = v.slice(0, 120);
     });
     var out = Object.keys(fromUrl).length ? fromUrl : saved;
-    if (!out.canal) out.canal = CONFIG.canalPadrao;
     store.set('caju_lp_attr', out);
     return out;
   })();
@@ -207,7 +219,7 @@ var CONFIG = {
 
   /* ---------- envio ---------- */
   var payloads = [];
-  function enviar(etapa, dados) {
+  function enviar(form, etapa, dados) {
     if (CONFIG.mode === 'prototype') {
       payloads.push('// ' + etapa + '\n' + JSON.stringify(dados, null, 2));
       var box = $('#proto-payload');
@@ -215,19 +227,45 @@ var CONFIG = {
       $('pre', box).textContent = payloads.join('\n\n');
       return new Promise(function (resolve) { setTimeout(resolve, 650); });
     }
-    // modo live: ligar ao proc.php (JSONP) da AC na próxima etapa do projeto
-    return Promise.reject(new Error('Envio ainda não configurado.'));
+    // JSONP no proc.php, como o embed oficial da AC: ela responde chamando funções globais
+    return new Promise(function (resolve, reject) {
+      var cfg = CONFIG.ac[form];
+      if (!cfg || !cfg.f) { reject(new Error('config')); return; }
+      var pares = [['u', cfg.u], ['f', cfg.f], ['s', ''], ['c', '0'], ['m', '0'], ['act', 'sub'], ['v', '2'], ['or', cfg.or]];
+      Object.keys(dados.contato).forEach(function (k) {
+        if (dados.contato[k] && CONFIG.ac.fields[k]) pares.push([CONFIG.ac.fields[k], dados.contato[k]]);
+      });
+      var fim = false, timer, s = document.createElement('script');
+      function acabou(fn, arg) { if (fim) return; fim = true; clearTimeout(timer); s.remove(); fn(arg); }
+      window._show_thank_you = function () { acabou(resolve); };
+      window._show_unsubscribe = function () { acabou(resolve); };
+      window._show_error = function (id, msg) { acabou(reject, new Error(String(msg || ''))); };
+      s.src = CONFIG.ac.endpoint + '?' + pares.map(function (x) {
+        return encodeURIComponent(x[0]) + '=' + encodeURIComponent(x[1]);
+      }).join('&') + '&jsonp=true';
+      s.onerror = function () { acabou(reject, new Error('rede')); };
+      timer = setTimeout(function () { acabou(reject, new Error('tempo')); }, 15000);
+      document.head.appendChild(s);
+    });
   }
   function travar(btn) { btn.disabled = true; btn.dataset.txt = btn.innerHTML; btn.textContent = 'Enviando…'; }
   function destravar(btn) { btn.disabled = false; if (btn.dataset.txt) btn.innerHTML = btn.dataset.txt; }
 
   function atribuicao() {
     return {
-      b2b_canal: attr.canal,
+      b2b_funil_origem: CONFIG.origem,
       b2b_consultor_codigo: attr.consultor || '',
       utm_source: attr.utm_source || '', utm_medium: attr.utm_medium || '',
       utm_campaign: attr.utm_campaign || '', utm_content: attr.utm_content || ''
     };
+  }
+  // faixa do campo 50, a mesma dos outros formulários: é o que o job usa para classificar
+  function faixaPorte(n) {
+    var faixas = [[1, 'Apenas eu / Autônomo(a)'], [5, '2 a 5 funcionários'], [10, '6 a 10 funcionários'], [20, '11 a 20 funcionários'],
+      [50, '21 a 50 funcionários'], [100, '51 a 100 funcionários'], [250, '101 a 250 funcionários'], [500, '251 a 500 funcionários'],
+      [1000, '501 a 1.000 funcionários']];
+    for (var i = 0; i < faixas.length; i++) if (n <= faixas[i][0]) return faixas[i][1];
+    return 'Mais de 1.000 funcionários';
   }
   function merge(a, b) { Object.keys(b).forEach(function (k) { a[k] = b[k]; }); return a; }
 
@@ -326,18 +364,17 @@ var CONFIG = {
         nome_da_empresa: contato.empresa,
         b2b_cnpj: contato.cnpj,
         b2b_headcount: digits(v('headcount')),
+        porte: faixaPorte(+digits(v('headcount'))),
         b2b_plano_interesse: valorRadio(fEmp, 'plano'),
-        b2b_intencao: 'contrato',
         b2b_termo_versao: CONFIG.termoVersao,
         b2b_termo_aceite_em: new Date().toISOString()
       }, atribuicao()),
-      tags: ['b2b_origem_sva_caju'],
-      negocio: { pipeline: 'Canal Parceiros', estagio: 'Solicitação de contrato' },
-      make: 'busca e-mail do consultor no Notion → notifica a Eva (consultor em cópia) → envia confirmação com o Termo'
+      negocio: { pipeline: 'Funil Eva Maternidade', estagio: 'Contrato solicitado' },
+      automacao: 'cria o negócio, avisa a Eva e envia a confirmação com o Termo'
     };
     var btn = $('button[type="submit"]', fEmp);
     travar(btn);
-    enviar('Solicitação · formulário F-A', dados).then(function () {
+    enviar('solicitacao', 'Solicitação de contrato', dados).then(function () {
       destravar(btn);
       preencherConfirmacao($('#ok-solicitacao'));
       track('solicitacao_enviada', { plano: dados.contato.b2b_plano_interesse || 'nao_informado' });
@@ -428,10 +465,10 @@ var CONFIG = {
   function enviarContrato(extra, btn) {
     var dados = {
       contato: merge(merge({ email: contato.email }, juridico), extra || {}),
-      negocio: { estagio: 'Dados completos (via automação)' }
+      automacao: 'atualiza o contato e avisa a Eva'
     };
     if (btn) travar(btn);
-    return enviar('Dados do contrato · formulário F-B', dados).then(function () {
+    return enviar('contrato', 'Dados do contrato', dados).then(function () {
       if (btn) destravar(btn);
       track('contrato_completo');
       finalizar(true);
@@ -510,16 +547,14 @@ var CONFIG = {
         email: contato.email,
         phone: contato.whatsapp ? '+55' + digits(contato.whatsapp) : '',
         nome_da_empresa: contato.empresa,
-        b2b_intencao: 'especialista',
         b2b_observacoes: v('mensagem')
       }, atribuicao()),
-      tags: ['b2b_origem_sva_caju'],
-      negocio: { pipeline: 'Canal Parceiros', estagio: 'Contato solicitado' },
-      make: 'busca e-mail do consultor no Notion → notifica a Eva para responder (consultor em cópia)'
+      negocio: { pipeline: 'Funil Eva Maternidade', estagio: 'Lead recebido' },
+      automacao: 'cria o negócio, avisa a Eva e envia a confirmação'
     };
     var btn = $('button[type="submit"]', fConv);
     travar(btn);
-    enviar('Falar com especialista · formulário F-A', dados).then(function () {
+    enviar('especialista', 'Falar com especialista', dados).then(function () {
       destravar(btn);
       fConv.hidden = true;
       preencherConfirmacao($('#ok-conversa'));
