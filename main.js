@@ -11,7 +11,7 @@
  *   -> 3 Contrato, opcional: dados jurídicos -> assinatura/financeiro
  */
 var CONFIG = {
-  mode: 'prototype',
+  mode: 'live',
   // prazo de envio do contrato (pendente de confirmação com a Nathália)
   sla: '2 dias úteis',
   termoVersao: 'v0 · rascunho em revisão jurídica (13/10/2026)',
